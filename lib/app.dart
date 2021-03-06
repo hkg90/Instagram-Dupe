@@ -3,10 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'package:location/location.dart';
+import 'package:flutter/services.dart';
+import 'package:wasteagram/pages/camera_screen.dart';
 
 import 'pages/entries.dart';
 import 'pages/new_entry.dart';
 import 'package:wasteagram/widgets/loading.dart';
+import 'package:wasteagram/widgets/location.dart';
 
 // Creates widgets depending on set user preferences (theme and # journal entries)
 class App extends StatefulWidget  {
@@ -35,6 +39,7 @@ class AppState extends State<App> {
   
   void initState(){
     super.initState();
+    //retrieveLocation();
     // Determines number of entries currently written in journal. If 0, 
     // welcome page will load, else journal entries page will load
     //loadJournal();
@@ -106,9 +111,9 @@ class AppState extends State<App> {
                       (entriesSetting == 0) ? loadPage(context): JournalEntries(),
                       // Contains widget for floating action new journal entry form button
                       floatingActionButton: FloatingActionButton(
-                        child: Icon(Icons.camera),
+                        child: Icon(Icons.camera_alt),
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewEntry()));}
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => CameraScreen()));}
                       ),
                       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
                     );

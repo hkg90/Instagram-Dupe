@@ -10,6 +10,8 @@ import 'package:flutter/widgets.dart';
       return Column(
         children: [
             Text('Loading', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
-            Center(child: CircularProgressIndicator(),)
+            Center(child: CircularProgressIndicator(),),
+            Text('Latitute:'),
+            Text('Longitutde')
         ],);    
   }

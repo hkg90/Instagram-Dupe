@@ -3,7 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //import 'package:sqflite/sqflite.dart';
 import 'package:flutter/widgets.dart';
+import 'package:location/location.dart';
+import 'package:flutter/services.dart';
+import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:wasteagram/widgets/display_single_entry.dart';
 import 'package:wasteagram/widgets/loading.dart';
@@ -25,8 +30,22 @@ class JournalEntriesState extends State<JournalEntries> {
   // Retrieve journal entries from database
   void initState(){
     super.initState();
+    retrieveLocation();
     //loadJournal();
   }
+  LocationData locationData;
+  
+
+  void retrieveLocation() async {
+    { 
+      var locationService = Location();
+      locationData = await locationService.getLocation();
+      setState(() {
+        
+      });
+    }
+  }
+
   
   // // Retreives journal entries from database
   // Future loadJournal() async {
@@ -63,14 +82,20 @@ class JournalEntriesState extends State<JournalEntries> {
   
   // Determines device orientation and desired build
   Widget build(BuildContext context){    
-    return layoutBuildDecider(context);
+    if (locationData == null){
+      return Center(child: CircularProgressIndicator(),);
+    }
+    else{
+      return layoutBuildDecider(context);
+    }
+    
   }
 
   // // Builds widgets per device orientation
   // Widget layoutDecider (BuildContext context, BoxConstraints constraints) =>
   // constraints.maxWidth < 500? verticalLayout(context) : horizontalLayout(context);
 
-  final userJournal = ['example date', '1'];
+  final userJournal = ['Latitutde: ', 'Longitude: '];
 
   // Determines whether to load 'loading' page or list of entries page
   Widget layoutBuildDecider(BuildContext context)  {
@@ -88,8 +113,8 @@ class JournalEntriesState extends State<JournalEntries> {
         separatorBuilder:  (BuildContext context, int index) => Divider(), 
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
-            title: Text(userJournal[0]),
-            subtitle: Text(userJournal[1]),
+            title: Text(userJournal[0] + '${locationData.latitude}'),
+            subtitle: Text(userJournal[1] + '${locationData.longitude}'),
             onTap: () {Navigator.push(
                 context, MaterialPageRoute(builder: (context) {                
                   return DetailedEntries(newEntry: userJournal);} 
@@ -98,30 +123,6 @@ class JournalEntriesState extends State<JournalEntries> {
           );
       });
   }
-
-  // // Widget to dispaly 'master mode' of journal entries
-  // Widget detailedVerticalLayout(BuildContext context){
-  
-  // return ListView.separated(
-  //     itemCount: userJournal.length,
-  //     separatorBuilder:  (BuildContext context, int index) => Divider(), 
-  //     itemBuilder: (BuildContext context, int index) {
-  //       return ListTile(
-  //       title: Text(userJournal[index].title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
-  //       subtitle: Text(userJournal[index].body + '\n' + userJournal[index].dateTime + '\n' + 'Rating: ' + userJournal[index].rating.toString(),)
-  //       );
-  //     });    
-  // } 
-
-// // Layout of widgets when phone orientation is horizontal
-//  Widget horizontalLayout(BuildContext context) {  
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//       children: [
-//         Expanded(child: verticalLayout(context)),
-//         Expanded(child: detailedVerticalLayout(context))
-//       ]);  
-//   }
-
-  
+ 
 }
+
