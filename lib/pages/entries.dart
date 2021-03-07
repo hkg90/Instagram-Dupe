@@ -10,8 +10,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:wasteagram/widgets/display_single_entry.dart';
-import 'package:wasteagram/widgets/loading.dart';
+import '../widgets/display_single_entry.dart';
+import '../widgets/loading.dart';
 
 
 // Generates listview of all journal entries and loads 'Loading' page

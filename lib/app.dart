@@ -9,8 +9,8 @@ import 'package:wasteagram/pages/camera_screen.dart';
 
 import 'pages/entries.dart';
 import 'pages/new_entry.dart';
-import 'package:wasteagram/widgets/loading.dart';
-import 'package:wasteagram/widgets/location.dart';
+import './widgets/loading.dart';
+import './widgets/location.dart';
 
 // Creates widgets depending on set user preferences (theme and # journal entries)
 class App extends StatefulWidget  {
