@@ -55,12 +55,12 @@ class AppState extends State<App> {
                   return new Scaffold(
                     // Adds settings drawer
                     //endDrawer: SettingsDrawer(),
-                    appBar: 
-                    AppBar(
-                        // Determmines title display text
-                        title: Text('Wasteagram'),
-                        centerTitle: true,
-                    ),
+                    // appBar: 
+                    // AppBar(
+                    //     // Determmines title display text
+                    //     title: Text('Wasteagram - Total: '),
+                    //     centerTitle: true,
+                    // ),
                     body: 
                       // Determines which page to display (welcome or list of entries)
                       AppPosts(),

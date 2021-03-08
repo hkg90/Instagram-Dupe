@@ -65,31 +65,42 @@ class AppPostsState extends State<AppPosts> {
       StreamBuilder(
         stream: FirebaseFirestore.instance.collection('posts').orderBy('Date', descending: true).snapshots(),
       builder: (BuildContext context,  AsyncSnapshot<QuerySnapshot> snapshot) {
-        //snapshot.hasData && snapshot.data.documents != null && snapshot.data.documents.length > 0
+        //Checks to see if snapshot data has been received or if there is no data yet in database
         if (snapshot. hasData && snapshot.data.docs != null && snapshot.data.docs.length > 0){
-          return ListView.builder(
-            itemCount: snapshot.data.docs.length,
-            itemBuilder: (BuildContext context, int index) {
-            var appPost = snapshot.data.docs[index];
-            return ListTile(
-              title: Text(DateFormat.yMMMMEEEEd().format(appPost['Date'].toDate()) ),
-              trailing: Text(appPost['Amount'].toString()),
-              //subtitle: Text(userJournal[1] ),
-              onTap: () {Navigator.push(
-                  context, MaterialPageRoute(builder: (context) {                
-                    return DetailedEntries(entryData: appPost);} 
-                  ),
-              );},
-            );
+          // Calculates total sum of amounts of entries in database. 
+          // Reference source: I used the example code solutio that was discussed in this post: https://stackoverflow.com/questions/58165991/flutter-firestore-calculations-not-working and modified it for my program
+          final sum = snapshot.data.docs.fold(0, (total, index) => total + int.parse(index['Amount']));
+          
+          // Returns listView widget of all entries
+          return new Scaffold(
+            appBar: AppBar(
+            title: Text('Wasteagram - Total: ' + sum.toString()),
+            centerTitle: true,),
+            body: ListView.builder(
+              itemCount: snapshot.data.docs.length,
+              itemBuilder: (BuildContext context, int index) {
+              var appPost = snapshot.data.docs[index];
+              return ListTile(
+                // Formats date to weekday month day year
+                title: Text(DateFormat.yMMMMEEEEd().format(appPost['Date'].toDate()) ),
+                // Displays entry's amount
+                trailing: Text(appPost['Amount'].toString()),
+                
+                // If user clicks on entry, widget will display detailed entry
+                onTap: () {Navigator.push(
+                    context, MaterialPageRoute(builder: (context) {                
+                      return DetailedEntries(entryData: appPost);} 
+                    ),
+                );},
+              );
             }
-        );
-        }else{
-          return Center(child: CircularProgressIndicator(),);
+          ),);
         }
+        // If there are no entries in Cloud Firestore, then loading page is displayed
+        // until data has been added and can be displayed
+        else{
+          return loading(context);}
       },
-      );
+    );
   }
-  
- 
 }
-
