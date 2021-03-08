@@ -59,6 +59,7 @@ class AppState extends State<App> {
                     AppBar(
                         // Determmines title display text
                         title: Text('Wasteagram'),
+                        centerTitle: true,
                     ),
                     body: 
                       // Determines which page to display (welcome or list of entries)

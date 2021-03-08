@@ -92,80 +92,88 @@ class CameraScreenState extends State<CameraScreen> {
       return Center(child: CircularProgressIndicator(),);
     } else {
       // Once have image loaded, display image and new button to post image to wasteagram
-      return Material(
-              child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.file(File(image.path)),
-              SizedBox(height:40),
-              Form(
-          key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-                // Title entry field
-                TextFormField(
-                  autofocus: true,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: 'Enter Food Waste Amount', border: OutlineInputBorder()),
-                  
-                  // Store amount, date, latitude, longitude of entry
-                  onSaved: (value) {
-                    postFields.amount = value;
-                    final DateTime currentDate = DateTime.now();
-                            //DateFormat.yMMMMEEEEd().format(DateTime.now());
-                    postFields.date = currentDate;
-                    
-                    // Get longitutde and latitude values of post
-                    postFields.longitude = locationData.longitude.toString();
-                    postFields.latitude = locationData.latitude.toString();
+      return Scaffold(
+resizeToAvoidBottomPadding: false,
+        appBar: 
+          AppBar(
+            title: Text('New Post'),
+          ),
+          body: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height:40),
+                    Image.file(File(image.path)),
+                    SizedBox(height:40),
+                    Form(
+                key: formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                      // Title entry field
+                      TextFormField(
+                        autofocus: true,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+              labelText: 'Enter Food Waste Amount', border: OutlineInputBorder()),
+                        
+                        // Store amount, date, latitude, longitude of entry
+                        onSaved: (value) {
+              postFields.amount = value;
+              final DateTime currentDate = DateTime.now();
+                      //DateFormat.yMMMMEEEEd().format(DateTime.now());
+              postFields.date = currentDate;
+              
+              // Get longitutde and latitude values of post
+              postFields.longitude = locationData.longitude.toString();
+              postFields.latitude = locationData.latitude.toString();
 
-                    //Assign URL from Cloud Firebase
-                    postFields.url = imageURL;
-                  },                
-                  // The validator ensures amount was entered
-                  validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter amount of food waste';
-                      } return null;
-                    },),
-                  SizedBox(height:10),
+              //Assign URL from Cloud Firebase
+              postFields.url = imageURL;
+                        },                
+                        // The validator ensures amount was entered
+                        validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter amount of food waste';
+                } return null;
+              },),
+                        SizedBox(height:100),
          
-                  ElevatedButton(
-                    onPressed: () async {
-                      // Validate returns true if the form is valid
-                      if (formKey.currentState.validate()) {
-                        // If valid entry, save and submit data and go back to main screen
-                        formKey.currentState.save();
+                        SizedBox(
+                            
+                            width: double.infinity,
+                            height: 90,
+                            
+                            child: ElevatedButton(
+                              
+                              onPressed: () async {
+                                // Validate returns true if the form is valid
+                                if (formKey.currentState.validate()) {
+                                  // If valid entry, save and submit data and go back to main screen
+                                  formKey.currentState.save();
 
-                        //Send data to Cloud Firebase
-                      FirebaseFirestore.instance.collection('posts').add({
-                        'Date': postFields.date,
-                        'URL': postFields.url,
-                        'Longitude': postFields.longitude,
-                        'Latitude': postFields.latitude,
-                        'Amount': postFields.amount,
-                      });
-                         
-                    Navigator.of(context).pop();              
-                    }
-                  },
-                  child: Text('Save'),
-              )
-            ]
+                                  //Send data to Cloud Firebase
+                                FirebaseFirestore.instance.collection('posts').add({
+                                  'Date': postFields.date,
+                                  'URL': postFields.url,
+                                  'Longitude': postFields.longitude,
+                                  'Latitude': postFields.latitude,
+                                  'Amount': postFields.amount,
+                                });
+                                   
+                              Navigator.of(context).pop();              
+                              }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(Icons.cloud_upload_outlined, size: 80),
+                            ),
+                          ),
+                          )
+                  ]
          )
         ),
-
-              // RaisedButton(
-              //   child: Text('Post it'),
-              //   onPressed: (){
-
-              //   })
-            ],
-          ),
-        ),
+                  ],
+                ),
       );
     }
   }

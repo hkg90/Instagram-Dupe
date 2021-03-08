@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:location/location.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -62,7 +63,7 @@ class AppPostsState extends State<AppPosts> {
   Widget build(BuildContext context){
     return     
       StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+        stream: FirebaseFirestore.instance.collection('posts').orderBy('Date', descending: true).snapshots(),
       builder: (BuildContext context,  AsyncSnapshot<QuerySnapshot> snapshot) {
         //snapshot.hasData && snapshot.data.documents != null && snapshot.data.documents.length > 0
         if (snapshot. hasData && snapshot.data.docs != null && snapshot.data.docs.length > 0){
@@ -71,7 +72,8 @@ class AppPostsState extends State<AppPosts> {
             itemBuilder: (BuildContext context, int index) {
             var appPost = snapshot.data.docs[index];
             return ListTile(
-              title: Text(appPost['Amount'].toString() ),
+              title: Text(DateFormat.yMMMMEEEEd().format(appPost['Date'].toDate()) ),
+              trailing: Text(appPost['Amount'].toString()),
               //subtitle: Text(userJournal[1] ),
               onTap: () {Navigator.push(
                   context, MaterialPageRoute(builder: (context) {                
