@@ -3,35 +3,57 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import '../models/get_location.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 
 
 class PostEntryFields {
   String amount;
-  String dateTime;
+  String date;
   var longitude;
   var latitude;
   var url;
 
   String toString(){
-    return 'Amount: $amount, Date: $dateTime, Longitude: $longitude, Latitude: $latitude, URL: $url';
+    return 'Amount: $amount, Date: $date, Longitude: $longitude, Latitude: $latitude, URL: $url';
   }  
 }
 
 class CameraScreen extends StatefulWidget {
+  final LocationData location;
+  CameraScreen({this.location});
   
   @override
   CameraScreenState createState() => CameraScreenState();
 }
 
 class CameraScreenState extends State<CameraScreen> {
-  LocationData locationData;
+    // Retrieve location data from device
+  // void initState(){
+  //   super.initState();
+  //   retrieveLocation();
+    
+  // }
+  // LocationData locationData;
+  
+
+  // void retrieveLocation() async {
+  //   { 
+  //     var locationService = Location();
+  //     locationData = await locationService.getLocation();
+  //     setState(() {
+        
+  //     });
+  //   }
+  // }
   
   
   PickedFile image;
@@ -94,13 +116,12 @@ class CameraScreenState extends State<CameraScreen> {
                   decoration: InputDecoration(
                     labelText: 'Enter Food Waste Amount', border: OutlineInputBorder()),
                   
-                  // Store title and date/time in new journal object
+                  // Store amount, date, latitude, longitude of entry
                   onSaved: (value) {
                     postFields.amount = value;
-                    final DateTime currentTime = DateTime.now();
-                    // Formats date to acceptable database time/date format
-                    final String formatted = currentTime.toIso8601String();                 
-                    postFields.dateTime = formatted;
+                    final String currentDate = DateFormat.yMMMMd().format(DateTime.now());
+                            
+                    postFields.date = currentDate;
                     
                     // Get longitutde and latitude values of post
                     postFields.longitude = locationData.longitude;
@@ -121,7 +142,15 @@ class CameraScreenState extends State<CameraScreen> {
                         // If valid entry, save and submit data and go back to main screen
                         formKey.currentState.save();
 
- 
+                        //Send data to Cloud Firebase
+                      FirebaseFirestore.instance.collection('posts').add({
+                        'Date': postFields.date,
+                        'URL': postFields.url,
+                        'Longitude': postFields.longitude,
+                        'Latitude': postFields.latitude,
+                        'Amount': postFields.amount,
+                      });
+                         
                     Navigator.of(context).pop();              
                     }
                   },

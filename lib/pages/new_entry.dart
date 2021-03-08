@@ -1,17 +1,26 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-//import 'package:sqflite/sqflite.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 
 //import 'package:project4_journal/models/process_data.dart';
 
 import 'package:wasteagram/app.dart';
+import 'package:location/location.dart';
 
 
 // Form Widget that constructs the form for entering in new user journal entry
 // into the journal and databse
 class NewEntry extends StatefulWidget {
+  final LocationData location;
+  
+  NewEntry({this.location});
+
   @override
   _NewEntryState createState() => _NewEntryState();
 }
@@ -42,13 +51,13 @@ class _NewEntryState extends State<NewEntry> {
 }
 
 // A class that stores and creates a DTO for new journal entries
-class JournalEntryFields {
-  String title;
-  String body;
-  String dateTime;
-  int rating;
+class PostEntryFields {
+  String longitude;
+  String latitude;
+  String date;
+  int amount;
   String toString(){
-    return 'Title: $title, Body: $body, Time: $dateTime, Rating: $rating';
+    return 'Longitude: $title, Latitude: $body, Date: $dateTime, Amount: $rating';
   }  
 }
 
@@ -84,13 +93,16 @@ class JournalEntryFormState extends State<JournalEntryForm> {
                 decoration: InputDecoration(
                   labelText: 'Title', border: OutlineInputBorder()),
                 
-                // Store title and date/time in new journal object
+                // Store Picture
                 onSaved: (value) {
                   journalEntryFields.title = value;
-                  final DateTime currentTime = DateTime.now();
+                  final String currentDate = DateFormat.yMMMMd().format(DateTime.now());
+                  
+                  
+                  
                   // Formats date to acceptable database time/date format
-                  final String formatted = currentTime.toIso8601String();                 
-                  journalEntryFields.dateTime = formatted;
+                  //final String formatted = currentTime.toIso8601String();                 
+                  journalEntryFields.date = currentDate;
                 },                
                 // The validator ensures entered text is valid
                 validator: (value) {
@@ -146,7 +158,11 @@ class JournalEntryFormState extends State<JournalEntryForm> {
                     if (formKey.currentState.validate()) {
                       // If valid entry, save and submit data and go back to main screen
                       formKey.currentState.save();
-      
+                      
+                      //Send data to Cloud Firebase
+                      FirebaseFirestore.instance.collection('posts').add({
+                        
+                      });
 
   
                   // Close database file

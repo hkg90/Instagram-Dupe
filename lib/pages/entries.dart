@@ -30,11 +30,11 @@ class AppPostsState extends State<AppPosts> {
  
   
   
-  // Retrieve journal entries from database
+  // Retrieve location data from device
   void initState(){
     super.initState();
     retrieveLocation();
-    //loadJournal();
+    
   }
   LocationData locationData;
   
@@ -65,7 +65,7 @@ class AppPostsState extends State<AppPosts> {
         stream: FirebaseFirestore.instance.collection('posts').snapshots(),
       builder: (BuildContext context,  AsyncSnapshot<QuerySnapshot> snapshot) {
         //snapshot.hasData && snapshot.data.documents != null && snapshot.data.documents.length > 0
-        if (snapshot.hasData && snapshot.data.docs != null && snapshot.data.docs.length > 0){
+        if (snapshot. hasData && snapshot.data.docs != null && snapshot.data.docs.length > 0){
           return ListView.builder(
             itemCount: snapshot.data.docs.length,
             itemBuilder: (BuildContext context, int index) {
@@ -75,7 +75,7 @@ class AppPostsState extends State<AppPosts> {
               //subtitle: Text(userJournal[1] ),
               onTap: () {Navigator.push(
                   context, MaterialPageRoute(builder: (context) {                
-                    return DetailedEntries(newEntry: appPost);} 
+                    return DetailedEntries(newEntry: locationData);} 
                   ),
               );},
             );

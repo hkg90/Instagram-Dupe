@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:location/location.dart';
 import 'package:flutter/services.dart';
-import 'package:wasteagram/pages/camera_screen.dart';
+import 'package:wasteagram/pages/create_entry.dart';
 
 import 'pages/entries.dart';
 import 'pages/new_entry.dart';
@@ -59,14 +59,6 @@ class AppState extends State<App> {
                     AppBar(
                         // Determmines title display text
                         title: Text('Wasteagram'),
-                        // actions: [Builder( builder: (context) =>
-                        //   // Designates icon for settings drawer
-                        //   IconButton(
-                        //     icon: const Icon(Icons.settings),
-                        //     onPressed: () {
-                        //       Scaffold.of(context).openEndDrawer();},
-                        //   ),
-                        // ),]
                     ),
                     body: 
                       // Determines which page to display (welcome or list of entries)
