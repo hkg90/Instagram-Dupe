@@ -70,7 +70,7 @@ class AppState extends State<App> {
                     ),
                     body: 
                       // Determines which page to display (welcome or list of entries)
-                      (entriesSetting == 0) ? loadPage(context): AppPosts(),
+                      AppPosts(),
                       // Contains widget for floating action new journal entry form button
                       floatingActionButton: FloatingActionButton(
                         child: Icon(Icons.camera_alt),

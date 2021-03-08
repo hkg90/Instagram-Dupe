@@ -61,11 +61,11 @@ class AppPostsState extends State<AppPosts> {
   
   Widget build(BuildContext context){
     return     
-
       StreamBuilder(
         stream: FirebaseFirestore.instance.collection('posts').snapshots(),
       builder: (BuildContext context,  AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasData){
+        //snapshot.hasData && snapshot.data.documents != null && snapshot.data.documents.length > 0
+        if (snapshot.hasData && snapshot.data.docs != null && snapshot.data.docs.length > 0){
           return ListView.builder(
             itemCount: snapshot.data.docs.length,
             itemBuilder: (BuildContext context, int index) {
@@ -85,25 +85,6 @@ class AppPostsState extends State<AppPosts> {
           return Center(child: CircularProgressIndicator(),);
         }
       },
-              
-              
-              
-              
-        //       child: ListView.separated(
-        //   // itemCount: userJournal.length,
-        //   itemCount: 1,
-        //   separatorBuilder:  (BuildContext context, int index) => Divider(), 
-        //   itemBuilder: (BuildContext context, int index) {
-        //     return ListTile(
-        //       title: Text(userJournal[0] + '${locationData.latitude}'),
-        //       subtitle: Text(userJournal[1] + '${locationData.longitude}'),
-        //       onTap: () {Navigator.push(
-        //           context, MaterialPageRoute(builder: (context) {                
-        //             return DetailedEntries(newEntry: userJournal);} 
-        //           ),
-        //       );},
-        //     );
-        // }),
       );
   }
   

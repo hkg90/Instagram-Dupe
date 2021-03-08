@@ -68,7 +68,7 @@ class JournalEntryFormState extends State<JournalEntryForm> {
   
   @override
   Widget build(BuildContext context) {
-    AppState state = context.findAncestorStateOfType<AppState>();
+    //AppState state = context.findAncestorStateOfType<AppState>();
 
     // Builds a Form widget using the formKey created above
     return Padding(
@@ -147,15 +147,7 @@ class JournalEntryFormState extends State<JournalEntryForm> {
                       // If valid entry, save and submit data and go back to main screen
                       formKey.currentState.save();
       
-             
-                      
-                    // Update state
-                    // setState((){
-                    //   var value = state.entries + 1;
-                    //   newSetting(value);
-                    //   state.setState(() {
-                    //   state.entries = state.entries + 1;});
-                    // });
+
   
                   // Close database file
                   // await database.close();
