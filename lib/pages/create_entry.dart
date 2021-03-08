@@ -17,14 +17,14 @@ import 'package:intl/intl.dart';
 
 class PostEntryFields {
   String amount;
-  String date;
-  var longitude;
-  var latitude;
-  var url;
+  DateTime date;
+  String longitude;
+  String latitude;
+  String url;
 
-  String toString(){
-    return 'Amount: $amount, Date: $date, Longitude: $longitude, Latitude: $latitude, URL: $url';
-  }  
+  // String toString(){
+  //   return 'Amount: $amount, Date: $date, Longitude: $longitude, Latitude: $latitude, URL: $url';
+  // }  
 }
 
 class CameraScreen extends StatefulWidget {
@@ -60,6 +60,7 @@ class CameraScreenState extends State<CameraScreen> {
   final picker = ImagePicker();
   final formKey = GlobalKey<FormState>();
   final postFields = PostEntryFields();
+  var imageURL;
   void getImage() async {
     // Allows user to pick an image from emulator's default gallery images
     image = await picker.getImage(source: ImageSource.gallery);
@@ -71,7 +72,7 @@ class CameraScreenState extends State<CameraScreen> {
     
     // Execute upload task to send image to Cloud
     UploadTask newTask = storageReference.putFile(File(image.path));
-    var imageURL = await (await newTask).ref.getDownloadURL();
+    imageURL = await (await newTask).ref.getDownloadURL();
     print(imageURL);
     
 
@@ -87,14 +88,8 @@ class CameraScreenState extends State<CameraScreen> {
   @override
   Widget build(BuildContext context){
     if (image == null) {
-      return Center(
-      child: RaisedButton(
-        child: Text('Select Photo'),
-        onPressed: () {
-          getImage();
-          
-        },)
-      );
+      getImage();
+      return Center(child: CircularProgressIndicator(),);
     } else {
       // Once have image loaded, display image and new button to post image to wasteagram
       return Material(
@@ -119,13 +114,16 @@ class CameraScreenState extends State<CameraScreen> {
                   // Store amount, date, latitude, longitude of entry
                   onSaved: (value) {
                     postFields.amount = value;
-                    final String currentDate = DateFormat.yMMMMd().format(DateTime.now());
-                            
+                    final DateTime currentDate = DateTime.now();
+                            //DateFormat.yMMMMEEEEd().format(DateTime.now());
                     postFields.date = currentDate;
                     
                     // Get longitutde and latitude values of post
-                    postFields.longitude = locationData.longitude;
-                    postFields.latitude = locationData.latitude;
+                    postFields.longitude = locationData.longitude.toString();
+                    postFields.latitude = locationData.latitude.toString();
+
+                    //Assign URL from Cloud Firebase
+                    postFields.url = imageURL;
                   },                
                   // The validator ensures amount was entered
                   validator: (value) {

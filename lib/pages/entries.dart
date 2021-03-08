@@ -75,7 +75,7 @@ class AppPostsState extends State<AppPosts> {
               //subtitle: Text(userJournal[1] ),
               onTap: () {Navigator.push(
                   context, MaterialPageRoute(builder: (context) {                
-                    return DetailedEntries(newEntry: locationData);} 
+                    return DetailedEntries(entryData: appPost);} 
                   ),
               );},
             );
@@ -88,49 +88,6 @@ class AppPostsState extends State<AppPosts> {
       );
   }
   
-  // // Determines device orientation and desired build
-  // Widget build(BuildContext context){    
-  //   if (locationData == null){
-  //     return Center(child: CircularProgressIndicator(),);
-  //   }
-  //   else{
-  //     return layoutBuildDecider(context);
-  //   }
-    
-  // }
-
-  // // Builds widgets per device orientation
-  // Widget layoutDecider (BuildContext context, BoxConstraints constraints) =>
-  // constraints.maxWidth < 500? verticalLayout(context) : horizontalLayout(context);
-
-  final userJournal = ['Latitutde: ', 'Longitude: '];
-
-  // Determines whether to load 'loading' page or list of entries page
-  Widget layoutBuildDecider(BuildContext context)  {
-    // If no data yet from database, load 'loading' page in the interim 
-    return (userJournal == null ) ? loadPage(context) : loadList(context);   
-  } 
-
-  // Widget to display list of journal entries
-  
-  
-  Widget loadList(BuildContext context){    
-      return ListView.separated(
-        // itemCount: userJournal.length,
-        itemCount: 1,
-        separatorBuilder:  (BuildContext context, int index) => Divider(), 
-        itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            title: Text(userJournal[0] + '${locationData.latitude}'),
-            subtitle: Text(userJournal[1] + '${locationData.longitude}'),
-            onTap: () {Navigator.push(
-                context, MaterialPageRoute(builder: (context) {                
-                  return DetailedEntries(newEntry: userJournal);} 
-                ),
-            );},
-          );
-      });
-  }
  
 }
 
