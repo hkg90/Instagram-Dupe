@@ -42,7 +42,10 @@ class ShareLocationScreenState extends State<ShareLocationScreen> {
       locationData = null;
     }
     locationData = await locationService.getLocation();
-    setState(() {});
+
+    setState(() {
+      return locationData;
+    });
   }
 
   @override

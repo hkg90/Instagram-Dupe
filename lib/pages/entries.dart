@@ -8,24 +8,27 @@ import 'package:flutter/services.dart';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import '../widgets/display_single_entry.dart';
 import '../widgets/loading.dart';
 
 
+
 // Generates listview of all journal entries and loads 'Loading' page
 // if async functions have not yet received data from database.
-class JournalEntries extends StatefulWidget {
+class AppPosts extends StatefulWidget {
 
   @override
-  JournalEntriesState createState() => new JournalEntriesState();
+  AppPostsState createState() => new AppPostsState();
 }
 
-class JournalEntriesState extends State<JournalEntries> {
+class AppPostsState extends State<AppPosts> {
  
-  // var userJournal;
-  final String apptitle = 'Journal Entries';
+  
   
   // Retrieve journal entries from database
   void initState(){
@@ -47,49 +50,73 @@ class JournalEntriesState extends State<JournalEntries> {
   }
 
   
-  // // Retreives journal entries from database
-  // Future loadJournal() async {
-  //   // Open database file
-  //   Database database = await openDatabase(
-  //     'journal.sqlite3.db', version: 1, onCreate: (Database db, int version) async{
-  //       var query = await processSQLData();
-  //       await db.execute(query);
-  //     });
-    
-  //   // Retrieve data from sql database
-  //   List<Map> databaseEntries = await database.rawQuery('SELECT * FROM journal_entries');  
-
-  //   // Create journal object to store database entries in a list
-  //   final listEntries = databaseEntries.map((record){
-  //     return Entries(
-  //       title: record['title'],
-  //       body: record['body'], 
-  //       rating: record['rating'],
-  //       dateTime: DateFormat('EEEE, d MMM, yyyy').format(DateTime.parse(record['date'])));
-  //     }).toList();
-    
-  //   setState(() {
-  //     userJournal = listEntries;
-  //   });
-  // }
+  
 
   @override 
   // Rebuild widgets when changes made/ new journal entry added
-  void didUpdateWidget(JournalEntries oldWidget) {
+  void didUpdateWidget(AppPosts oldWidget) {
     super.didUpdateWidget(oldWidget);
     //loadJournal();
   }
   
-  // Determines device orientation and desired build
-  Widget build(BuildContext context){    
-    if (locationData == null){
-      return Center(child: CircularProgressIndicator(),);
-    }
-    else{
-      return layoutBuildDecider(context);
-    }
-    
+  Widget build(BuildContext context){
+    return     
+
+      StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+      builder: (BuildContext context,  AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasData){
+          return ListView.builder(
+            itemCount: snapshot.data.docs.length,
+            itemBuilder: (BuildContext context, int index) {
+            var appPost = snapshot.data.docs[index];
+            return ListTile(
+              title: Text(appPost['Amount'].toString() ),
+              //subtitle: Text(userJournal[1] ),
+              onTap: () {Navigator.push(
+                  context, MaterialPageRoute(builder: (context) {                
+                    return DetailedEntries(newEntry: appPost);} 
+                  ),
+              );},
+            );
+            }
+        );
+        }else{
+          return Center(child: CircularProgressIndicator(),);
+        }
+      },
+              
+              
+              
+              
+        //       child: ListView.separated(
+        //   // itemCount: userJournal.length,
+        //   itemCount: 1,
+        //   separatorBuilder:  (BuildContext context, int index) => Divider(), 
+        //   itemBuilder: (BuildContext context, int index) {
+        //     return ListTile(
+        //       title: Text(userJournal[0] + '${locationData.latitude}'),
+        //       subtitle: Text(userJournal[1] + '${locationData.longitude}'),
+        //       onTap: () {Navigator.push(
+        //           context, MaterialPageRoute(builder: (context) {                
+        //             return DetailedEntries(newEntry: userJournal);} 
+        //           ),
+        //       );},
+        //     );
+        // }),
+      );
   }
+  
+  // // Determines device orientation and desired build
+  // Widget build(BuildContext context){    
+  //   if (locationData == null){
+  //     return Center(child: CircularProgressIndicator(),);
+  //   }
+  //   else{
+  //     return layoutBuildDecider(context);
+  //   }
+    
+  // }
 
   // // Builds widgets per device orientation
   // Widget layoutDecider (BuildContext context, BoxConstraints constraints) =>

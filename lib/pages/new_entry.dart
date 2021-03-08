@@ -147,18 +147,7 @@ class JournalEntryFormState extends State<JournalEntryForm> {
                       // If valid entry, save and submit data and go back to main screen
                       formKey.currentState.save();
       
-                      // // Open database file
-                      // Database database = await openDatabase(
-                      //   'journal.sqlite3.db', version: 1, onCreate: (Database db, int version) async{
-                      //     var query = await processSQLData();
-                      //     await db.execute(query);
-                      //   });
-
-                      // // Run insert query to database
-                      // await database.transaction((txn) async {
-                      //   await txn.rawInsert('INSERT INTO journal_entries(title, body, rating, date) VALUES(?, ?, ?, ?)',
-                      //   [journalEntryFields.title, journalEntryFields.body, journalEntryFields.rating, journalEntryFields.dateTime]);
-                      // });
+             
                       
                     // Update state
                     // setState((){

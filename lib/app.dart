@@ -31,11 +31,6 @@ class AppState extends State<App> {
   var entriesState = 1;
 
 
-  // Getter for retreiving current preferences saved theme value (if no value saved, default to True)
-  //bool get themeSetting => widget.preferences.getBool(THEME_SETTING_KEY) ?? true;
-
-  // Getter for retreiving current preferences saved theme value (if no value saved, default to 0)
-  //int get entriesSetting => widget.preferences.getInt(ENTRIES_KEY) ?? 0;
   
   void initState(){
     super.initState();
@@ -45,40 +40,7 @@ class AppState extends State<App> {
     //loadJournal();
   }
 
-  // Loads journal data from sqflite database
-  // void loadJournal() async {   
-  //   // Open database file
-  //   Database database = await openDatabase(
-  //     'journal.sqlite3.db', version: 1, onCreate: (Database db, int version) async{
-  //       var query = await processSQLData();
-  //       await db.execute(query);
-  //     });
-  
-    // Retrieve data from sql database
-    //List<Map> databaseEntries = await database.rawQuery('SELECT * FROM journal_entries');
-
-    // Create journal object to store database entries into a list
-    // final listEntries = databaseEntries.map((record){
-    //   return Entries(
-    //     title: record['title'],
-    //     body: record['body'], 
-    //     rating: record['rating'],
-    //     dateTime: DateFormat('EEEE, d MMM, yyyy').format(DateTime.parse(record['date'])));
-    // }).toList();
     
-    // // Set state for journal
-    // setState(() {
-    //   userJournal = listEntries;   
-    // });
-  // }
-
-  // // Notifier variable, if variable value is changed UI theme will update
-  // ValueNotifier<bool> themeState = ValueNotifier<bool>(true);
-
-  // // Notifier variable, if variable value is changed page will switch from 'welcome'
-  // // display to list of journal entries
-  // ValueNotifier<int> entriesState = ValueNotifier<int>(0);
-  
   @override
   Widget build(BuildContext context) {
     // Value Listenable builder rebuilds widgets if themeState and/ or entries State 
@@ -108,7 +70,7 @@ class AppState extends State<App> {
                     ),
                     body: 
                       // Determines which page to display (welcome or list of entries)
-                      (entriesSetting == 0) ? loadPage(context): JournalEntries(),
+                      (entriesSetting == 0) ? loadPage(context): AppPosts(),
                       // Contains widget for floating action new journal entry form button
                       floatingActionButton: FloatingActionButton(
                         child: Icon(Icons.camera_alt),
