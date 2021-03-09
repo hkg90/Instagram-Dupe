@@ -1,13 +1,16 @@
 import 'package:location/location.dart';
 import 'package:flutter/services.dart';
 
-LocationData locationData;
-  
+LocationData locationData;  
 var locationService = Location();
 
+// Class contains functions that retrieve the current location of the device and 
+// ensure that user's location services permissions are enabled (if not allowed/ 
+// enabled by user, returns error message).
 class FindLocation {
 Future retrieveLocation() async {
     try {
+      // Determine if enabled
       var _serviceEnabled = await locationService.serviceEnabled();
       if (!_serviceEnabled) {
         _serviceEnabled = await locationService.requestService();
@@ -17,6 +20,7 @@ Future retrieveLocation() async {
         }
       }
 
+      // Determine if permission approved
       var _permissionGranted = await locationService.hasPermission();
       if (_permissionGranted == PermissionStatus.denied) {
         _permissionGranted = await locationService.requestPermission();
@@ -30,10 +34,11 @@ Future retrieveLocation() async {
       print('Error: ${e.toString()}, code: ${e.code}');
       locationData = null;
     }  
-    
+    // Return location data
     return await getNewLocation();
   }
 
+  // Determines location data
   Future getNewLocation() async {
   locationData = await locationService.getLocation();
   return locationData;

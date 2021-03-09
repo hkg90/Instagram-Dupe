@@ -16,35 +16,19 @@ class App extends StatefulWidget  {
 }
 
 class AppState extends State<App> {
-  //var theme = true;
-  var entriesSetting = 1;
-  var userJournal;
-  var themeState = true;
-  var entriesState = 1;
 
-
-  
-  void initState(){
-    super.initState();
-  }
-
-    
   @override
   Widget build(BuildContext context) {
-    // Value Listenable builder rebuilds widgets if themeState and/ or entries State 
-    // value notifier variable's value is changed
-    return MaterialApp(
-            // Determmines title display text
+     return MaterialApp(
             title: 'Wasteagram',
-            // Determines theme of app
             theme: ThemeData.dark(),
             home: Builder(
                 builder: (context) {
                   return new Scaffold(
                     body: 
-                      // Determines which page to display (welcome or list of entries)
+                      // Generate widget for displaying list of posts (or loading page when applicable)
                       AppPosts(),
-                      // Contains widget for floating action new journal entry form button
+                      // Button for adding new post to Wasteagram
                       floatingActionButton: Semantics(
                         label: "This button widget allows the user to access their device's gallery and select a photo for a new Wasteagram entry post.",
                         button: true,

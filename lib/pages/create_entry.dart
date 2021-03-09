@@ -83,13 +83,18 @@ class NewEntryState extends State<NewEntry> {
                         // Food quantity wasted entered in this text field.
                         child: TextFormField(
                           autofocus: true,
+                          // Reference source: https://stackoverflow.com/questions/49577781/how-to-create-number-input-field-in-flutter 
+                          // I used the example code in this article to ensure that the user can only enter numbers into the field
+                          // and cannot enter commas or decimal points (to ensure entries are only of type int)
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                           labelText: 'Enter Food Waste Amount', border: OutlineInputBorder()),
                           
-                          // Store amount, date, latitude, longitude of entry
+                          // Store amount, date, latitude, longitude and URL of entry
                           onSaved: (value) {
                             postFields.amount = value;
+                            // Get current date/ time
                             final DateTime currentDate = DateTime.now();
                             postFields.date = currentDate;                            
                             // Get longitutde and latitude values of post
