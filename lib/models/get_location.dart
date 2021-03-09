@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:flutter/services.dart';
 
@@ -6,7 +5,7 @@ LocationData locationData;
   
 var locationService = Location();
 
-
+class FindLocation {
 Future retrieveLocation() async {
     try {
       var _serviceEnabled = await locationService.serviceEnabled();
@@ -35,5 +34,5 @@ Future retrieveLocation() async {
    
     
     return locationData;
-  
   }
+}

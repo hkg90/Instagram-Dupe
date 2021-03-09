@@ -40,7 +40,7 @@ class CameraScreenState extends State<CameraScreen> {
   void getImage() async {
     // Allows user to pick an image from emulator's default gallery images
     image = await picker.getImage(source: ImageSource.gallery);
-    locationData = await retrieveLocation();
+    locationData = await FindLocation().retrieveLocation();
     // Send image to Cloud Firestore - 'file_name' uses the date time stamp to create a 
     // unique file name to store the file in the Cloud
     final fileName = DateTime.now();

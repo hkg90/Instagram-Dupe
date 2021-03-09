@@ -23,23 +23,23 @@ class AppPosts extends StatefulWidget {
 }
 
 class AppPostsState extends State<AppPosts> {
-  LocationData locationData;
+  //LocationData locationData;
 
   // Retrieve location data from device
   void initState(){
     super.initState();
-    retrieveLocation();
+   // retrieveLocation();
   }
     
-  // Gets location data from phone device
-  void retrieveLocation() async {
-    { 
-      var locationService = Location();
-      locationData = await locationService.getLocation();
-      setState(() {
-      });
-    }
-  }
+  // // Gets location data from phone device
+  // void retrieveLocation() async {
+  //   { 
+  //     var locationService = Location();
+  //     locationData = await locationService.getLocation();
+  //     setState(() {
+  //     });
+  //   }
+  // }
 
   @override 
   // Rebuild widgets when changes made/ new journal entry added
