@@ -29,10 +29,13 @@ Future retrieveLocation() async {
     } on PlatformException catch (e) {
       print('Error: ${e.toString()}, code: ${e.code}');
       locationData = null;
-    }
-    locationData = await locationService.getLocation();
-   
+    }  
     
-    return locationData;
+    return await getNewLocation();
+  }
+
+  Future getNewLocation() async {
+  locationData = await locationService.getLocation();
+  return locationData;
   }
 }

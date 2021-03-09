@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:wasteagram/models/proccess_image.dart';
 
 
 
@@ -37,20 +38,27 @@ class CameraScreenState extends State<CameraScreen> {
   final formKey = GlobalKey<FormState>();
   final postFields = PostEntryFields();
   var imageURL;
-  void getImage() async {
-    // Allows user to pick an image from emulator's default gallery images
-    image = await picker.getImage(source: ImageSource.gallery);
+  void processImage() async {
+    // // Allows user to pick an image from emulator's default gallery images
+    // image = await picker.getImage(source: ImageSource.gallery);
+    // locationData = await FindLocation().retrieveLocation();
+    // // Send image to Cloud Firestore - 'file_name' uses the date time stamp to create a 
+    // // unique file name to store the file in the Cloud
+    // final fileName = DateTime.now();
+    // Reference storageReference = FirebaseStorage.instance.ref().child(fileName.toString()+'.jpg');
+    
+    // // Execute upload task to send image to Cloud
+    // UploadTask newTask = storageReference.putFile(File(image.path));
+    // imageURL = await (await newTask).ref.getDownloadURL();
+    // print(imageURL);
+    
+    // Processes user's selected picture and converts it into a URL via Cloud storage
+    final imageResult = await ConvertImage().getImage(picker);
+    image = imageResult[0];
+    imageURL = imageResult[1];
+
+    // Get location data
     locationData = await FindLocation().retrieveLocation();
-    // Send image to Cloud Firestore - 'file_name' uses the date time stamp to create a 
-    // unique file name to store the file in the Cloud
-    final fileName = DateTime.now();
-    Reference storageReference = FirebaseStorage.instance.ref().child(fileName.toString()+'.jpg');
-    
-    // Execute upload task to send image to Cloud
-    UploadTask newTask = storageReference.putFile(File(image.path));
-    imageURL = await (await newTask).ref.getDownloadURL();
-    print(imageURL);
-    
 
     setState(() {
     });
@@ -59,7 +67,7 @@ class CameraScreenState extends State<CameraScreen> {
   @override
   Widget build(BuildContext context){
     if (image == null) {
-      getImage();
+      processImage();
       return Center(child: CircularProgressIndicator(),);
     } else {
       // Once have image loaded, display image and new button to post image to wasteagram
