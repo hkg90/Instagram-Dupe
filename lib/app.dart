@@ -49,10 +49,11 @@ class AppState extends State<App> {
                       AppPosts(),
                       // Contains widget for floating action new journal entry form button
                       floatingActionButton: Semantics(
-                                              button: true,
-                                              enabled: true,
-                                              onTapHint: 'Select an iamge',
-                                              child: FloatingActionButton(
+                        label: "This button widget allows the user to access their device's gallery and select a photo for a new Wasteagram entry post.",
+                        button: true,
+                        enabled: true,
+                        onTapHint: 'Select an iamge',
+                        child: FloatingActionButton(
                           child: Icon(Icons.camera_alt),
                           onPressed: () {
                             Navigator.of(context).push(MaterialPageRoute(builder: (context) => CameraScreen()));}

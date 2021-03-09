@@ -67,18 +67,24 @@ class AppPostsState extends State<AppPosts> {
               itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int index) {
               var appPost = snapshot.data.docs[index];
-              return ListTile(
-                // Formats date to weekday month day year
-                title: Text(DateFormat.yMMMMEEEEd().format(appPost['date'].toDate()) ),
-                // Displays entry's amount
-                trailing: Text(appPost['quantity'].toString()),
-                
-                // If user clicks on entry, widget will display detailed entry
-                onTap: () {Navigator.push(
-                    context, MaterialPageRoute(builder: (context) {                
-                      return DetailedEntries(entryData: appPost);} 
-                    ),
-                );},
+              return Semantics(
+                  label: 'This clickable widget is used to allow the user to display a detailed entry page of this post.',
+                  button: true,
+                  enabled: true,
+                  onTapHint: 'Clicking a tile will open a new page that displays a detailed entry of this Wasteagram post.',
+                  child: ListTile(
+                  // Formats date to weekday month day year
+                  title: Text(DateFormat.yMMMMEEEEd().format(appPost['date'].toDate()) ),
+                  // Displays entry's amount
+                  trailing: Text(appPost['quantity'].toString()),
+                  
+                  // If user clicks on entry, widget will display detailed entry
+                  onTap: () {Navigator.push(
+                      context, MaterialPageRoute(builder: (context) {                
+                        return DetailedEntries(entryData: appPost);} 
+                      ),
+                  );},
+                ),
               );
             }
           ),);

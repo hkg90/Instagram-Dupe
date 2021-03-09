@@ -53,11 +53,6 @@ class CameraScreenState extends State<CameraScreen> {
     
 
     setState(() {
-      // if (pickedFile != null) {
-      //   image = File(pickedFile.path);
-      // } else {
-      //   print('No image selected.');
-      // }
     });
   }
 
@@ -85,76 +80,79 @@ resizeToAvoidBottomPadding: false,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                      // Title entry field
-                      TextFormField(
-                        autofocus: true,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-              labelText: 'Enter Food Waste Amount', border: OutlineInputBorder()),
-                        
-                        // Store amount, date, latitude, longitude of entry
-                        onSaved: (value) {
-              postFields.amount = value;
-              final DateTime currentDate = DateTime.now();
-                      //DateFormat.yMMMMEEEEd().format(DateTime.now());
-              postFields.date = currentDate;
-              
-              // Get longitutde and latitude values of post
-              postFields.longitude = locationData.longitude.toString();
-              postFields.latitude = locationData.latitude.toString();
+                      // Food quantity wasted entered in this text field.
+                      Semantics(
+                        label: 'This text form widget allows the user to submit a quantity of the amount of food wasted in their post.',
+                        button: true,
+                        enabled: true,
+                        onTapHint: "This field is for entering in how much food was wasted. The quantity will be submitted to Wasteagram's database.",
+                        child: TextFormField(
+                          autofocus: true,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                          labelText: 'Enter Food Waste Amount', border: OutlineInputBorder()),
+                          
+                          // Store amount, date, latitude, longitude of entry
+                          onSaved: (value) {
+                            postFields.amount = value;
+                            final DateTime currentDate = DateTime.now();
+                            postFields.date = currentDate;
+                            
+                            // Get longitutde and latitude values of post
+                            postFields.longitude = locationData.longitude.toString();
+                            postFields.latitude = locationData.latitude.toString();
 
-              //Assign URL from Cloud Firebase
-              postFields.url = imageURL;
-                        },                
-                        // The validator ensures amount was entered
-                        validator: (value) {
-                if (value.isEmpty) {
-                  return 'Please enter amount of food waste';
-                } return null;
-              },),
-                        SizedBox(height:100),
+                            //Assign URL from Cloud Firebase
+                            postFields.url = imageURL;},                
+                                        
+                          // The validator ensures amount was entered
+                          validator: (value) {
+                              if (value.isEmpty) {
+                                return 'Please enter amount of food waste';
+                              } return null;
+                            },
+                        ),
+                      ),
+                      SizedBox(height:100),
          
-                        SizedBox(
-                            
-                            width: double.infinity,
-                            height: 90,
-                            
-                            child: Semantics(
-                              button: true,
-                              enabled: true,
-                              onTapHint: 'Select an iamge',
-                              child: ElevatedButton(
-                                
-                                onPressed: () async {
-                                  // Validate returns true if the form is valid
-                                  if (formKey.currentState.validate()) {
-                                    // If valid entry, save and submit data and go back to main screen
-                                    formKey.currentState.save();
+                      SizedBox(
+                        width: double.infinity,
+                        height: 90,                          
+                        child: Semantics(
+                          label: 'This button allows the user to submit their entry to the Cloud Firebase database for Wasteagram.',
+                          button: true,
+                          enabled: true,
+                          onTapHint: "Clicking this button will submit a new entry to Wastegram's database",
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              // Validate returns true if the form is valid
+                              if (formKey.currentState.validate()) {
+                                // If valid entry, save and submit data and go back to main screen
+                                formKey.currentState.save();
 
-                                    //Send data to Cloud Firebase
-                                  FirebaseFirestore.instance.collection('posts').add({
-                                    'date': postFields.date,
-                                    'imageURL': postFields.url,
-                                    'longitude': postFields.longitude,
-                                    'latitude': postFields.latitude,
-                                    'quantity': postFields.amount,
-                                  });
-                                     
-                                Navigator.of(context).pop();              
-                                }
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(Icons.cloud_upload_outlined, size: 80),
-                              ),
+                                //Send data to Cloud Firebase
+                              FirebaseFirestore.instance.collection('posts').add({
+                                'date': postFields.date,
+                                'imageURL': postFields.url,
+                                'longitude': postFields.longitude,
+                                'latitude': postFields.latitude,
+                                'quantity': postFields.amount,
+                              });
+                            // Return to home page
+                            Navigator.of(context).pop();              
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(Icons.cloud_upload_outlined, size: 80),) ,
                           ),
-                            ),
-                          )
+                        ),
+                      )
                   ]
-         )
+              )
+            ),
+          ],
         ),
-                  ],
-                ),
       );
     }
   }
