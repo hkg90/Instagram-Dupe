@@ -3,8 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 
-
-// Widget to display single detailed journal entry (title, body, rating, date)
+// Widget to display single detailed Wasteagram entry (date, picture, amount, longitude, latitude)
 class DetailedEntries extends StatelessWidget {
 final entryData;
 
@@ -15,17 +14,14 @@ DetailedEntries ({this.entryData});
       builder: (context) {
         return new Scaffold(
           appBar: 
-          AppBar(
-            title: Text('Wasteagram'),
-          ),
-          
+            AppBar(title: Text('Wasteagram'),),
           body: Center(
-            
             child: Padding(
               padding: const EdgeInsets.all(40.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
+                // Displays detailed entry
                 children: [
                   Text(DateFormat.yMMMMEEEEd().format(entryData['date'].toDate()), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),),
                   SizedBox(height:40),
@@ -35,12 +31,11 @@ DetailedEntries ({this.entryData});
                   SizedBox(height:40),
                   Text('Location: (' + entryData['latitude'].toString() + ', ' + entryData['longitude'] + ')', style: TextStyle(fontSize: 18)),
                 ],  
-         ),
+              ),
             ),
           ) 
         );
       } 
     );
   }
-
 }

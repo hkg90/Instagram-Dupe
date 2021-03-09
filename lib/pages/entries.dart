@@ -1,17 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
-import 'package:location/location.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../widgets/display_single_entry.dart';
 import '../widgets/loading.dart';
-
 
 
 // Generates listview of all Wasteagram entries and loads 'Loading' page
