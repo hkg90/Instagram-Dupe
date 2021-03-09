@@ -1,21 +1,16 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
-import '../models/get_location.dart';
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
+
+import '../models/get_location.dart';
 import 'package:wasteagram/models/proccess_image.dart';
 
 
-
+// Class acts as DTO for new entry post form data
 class PostEntryFields {
   String amount;
   DateTime date;
@@ -24,55 +19,47 @@ class PostEntryFields {
   String url;
 }
 
-class CameraScreen extends StatefulWidget {
+// Widget generates prompt for use to select an image from camera gallery and
+// processes generated form to Cloud Firebase database
+class NewEntry extends StatefulWidget {
   final LocationData location;
-  CameraScreen({this.location});
+  NewEntry({this.location});
   
   @override
-  CameraScreenState createState() => CameraScreenState();
+  NewEntryState createState() => NewEntryState();
 }
 
-class CameraScreenState extends State<CameraScreen> {
+class NewEntryState extends State<NewEntry> {
   PickedFile image;
-  final picker = ImagePicker();
   final formKey = GlobalKey<FormState>();
   final postFields = PostEntryFields();
   var imageURL;
-  void processImage() async {
-    // // Allows user to pick an image from emulator's default gallery images
-    // image = await picker.getImage(source: ImageSource.gallery);
-    // locationData = await FindLocation().retrieveLocation();
-    // // Send image to Cloud Firestore - 'file_name' uses the date time stamp to create a 
-    // // unique file name to store the file in the Cloud
-    // final fileName = DateTime.now();
-    // Reference storageReference = FirebaseStorage.instance.ref().child(fileName.toString()+'.jpg');
-    
-    // // Execute upload task to send image to Cloud
-    // UploadTask newTask = storageReference.putFile(File(image.path));
-    // imageURL = await (await newTask).ref.getDownloadURL();
-    // print(imageURL);
-    
-    // Processes user's selected picture and converts it into a URL via Cloud storage
-    final imageResult = await ConvertImage().getImage(picker);
+  
+  // Processes user's selected picture and converts it into a URL via Cloud storage
+  void processImage() async {    
+    final imageResult = await ConvertImage().getImage();
     image = imageResult[0];
     imageURL = imageResult[1];
-
     // Get location data
-    locationData = await FindLocation().retrieveLocation();
-
+    locationData = await FindLocation().retrieveLocation();    
+    // Update app state
     setState(() {
     });
   }
 
   @override
   Widget build(BuildContext context){
+    // If no image has been selected, open camera gallery and process
+    // selected image into a URL
     if (image == null) {
       processImage();
+      // While processing image, if not yet complete then display loading animation
       return Center(child: CircularProgressIndicator(),);
-    } else {
-      // Once have image loaded, display image and new button to post image to wasteagram
+    } 
+    // Once image has loaded, load form page to post image to wasteagram
+    else {
       return Scaffold(
-resizeToAvoidBottomPadding: false,
+        resizeToAvoidBottomPadding: false,
         appBar: 
           AppBar(
             title: Text('New Post'),
@@ -84,16 +71,16 @@ resizeToAvoidBottomPadding: false,
                     Image.file(File(image.path)),
                     SizedBox(height:40),
                     Form(
-                key: formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                      // Food quantity wasted entered in this text field.
+                  key: formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
                       Semantics(
                         label: 'This text form widget allows the user to submit a quantity of the amount of food wasted in their post.',
                         button: true,
                         enabled: true,
                         onTapHint: "This field is for entering in how much food was wasted. The quantity will be submitted to Wasteagram's database.",
+                        // Food quantity wasted entered in this text field.
                         child: TextFormField(
                           autofocus: true,
                           keyboardType: TextInputType.number,
@@ -104,16 +91,14 @@ resizeToAvoidBottomPadding: false,
                           onSaved: (value) {
                             postFields.amount = value;
                             final DateTime currentDate = DateTime.now();
-                            postFields.date = currentDate;
-                            
+                            postFields.date = currentDate;                            
                             // Get longitutde and latitude values of post
                             postFields.longitude = locationData.longitude.toString();
                             postFields.latitude = locationData.latitude.toString();
-
                             //Assign URL from Cloud Firebase
                             postFields.url = imageURL;},                
                                         
-                          // The validator ensures amount was entered
+                          // The validator ensures amount is not empty 
                           validator: (value) {
                               if (value.isEmpty) {
                                 return 'Please enter amount of food waste';
@@ -121,8 +106,7 @@ resizeToAvoidBottomPadding: false,
                             },
                         ),
                       ),
-                      SizedBox(height:100),
-         
+                      SizedBox(height:100),         
                       SizedBox(
                         width: double.infinity,
                         height: 90,                          
@@ -131,6 +115,7 @@ resizeToAvoidBottomPadding: false,
                           button: true,
                           enabled: true,
                           onTapHint: "Clicking this button will submit a new entry to Wastegram's database",
+                          // Button widget to submit form
                           child: ElevatedButton(
                             onPressed: () async {
                               // Validate returns true if the form is valid
@@ -139,15 +124,15 @@ resizeToAvoidBottomPadding: false,
                                 formKey.currentState.save();
 
                                 //Send data to Cloud Firebase
-                              FirebaseFirestore.instance.collection('posts').add({
+                                FirebaseFirestore.instance.collection('posts').add({
                                 'date': postFields.date,
                                 'imageURL': postFields.url,
                                 'longitude': postFields.longitude,
                                 'latitude': postFields.latitude,
                                 'quantity': postFields.amount,
-                              });
-                            // Return to home page
-                            Navigator.of(context).pop();              
+                                });
+                              // Return to home page
+                              Navigator.of(context).pop();              
                             }
                           },
                           child: Padding(

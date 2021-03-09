@@ -1,27 +1,19 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:location/location.dart';
-import '../models/get_location.dart';
-import 'package:flutter/material.dart';
-import 'package:location/location.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 
-
+// Class contains dart code to process an image selected by the user from the 
+// device's gallery and converts it into a URL via Cloud Storage Firebase. 
+// Returns converted data to widget.
 class ConvertImage {
   PickedFile image;
-  // final picker = ImagePicker();
-  // final formKey = GlobalKey<FormState>();
+  final picker = ImagePicker();
 
   var imageURL;
-  Future getImage(picker) async {
+  
+  // Converts image from device into a URL
+  Future getImage() async {
     // Allows user to pick an image from emulator's default gallery images
     image = await picker.getImage(source: ImageSource.gallery);
     
@@ -33,9 +25,7 @@ class ConvertImage {
     // Execute upload task to send image to Cloud
     UploadTask newTask = storageReference.putFile(File(image.path));
     imageURL = await (await newTask).ref.getDownloadURL();
-    print(imageURL);
     final result = [image, imageURL];
     return result; 
-   
   }
 }

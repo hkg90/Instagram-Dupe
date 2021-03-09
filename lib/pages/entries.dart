@@ -14,8 +14,8 @@ import '../widgets/loading.dart';
 
 
 
-// Generates listview of all journal entries and loads 'Loading' page
-// if async functions have not yet received data from database.
+// Generates listview of all Wasteagram entries and loads 'Loading' page
+// if async functions have not yet received data from Firebase database.
 class AppPosts extends StatefulWidget {
 
   @override
@@ -23,23 +23,6 @@ class AppPosts extends StatefulWidget {
 }
 
 class AppPostsState extends State<AppPosts> {
-  //LocationData locationData;
-
-  // Retrieve location data from device
-  void initState(){
-    super.initState();
-   // retrieveLocation();
-  }
-    
-  // // Gets location data from phone device
-  // void retrieveLocation() async {
-  //   { 
-  //     var locationService = Location();
-  //     locationData = await locationService.getLocation();
-  //     setState(() {
-  //     });
-  //   }
-  // }
 
   @override 
   // Rebuild widgets when changes made/ new journal entry added
@@ -49,9 +32,11 @@ class AppPostsState extends State<AppPosts> {
   
   Widget build(BuildContext context){
     return     
+      // StreamBuilder continuously requests updates from Firebase database for any changes/ new entries and
+      // will include new data in snapshot
       StreamBuilder(
         stream: FirebaseFirestore.instance.collection('posts').orderBy('date', descending: true).snapshots(),
-      builder: (BuildContext context,  AsyncSnapshot<QuerySnapshot> snapshot) {
+        builder: (BuildContext context,  AsyncSnapshot<QuerySnapshot> snapshot) {
         //Checks to see if snapshot data has been received or if there is no data yet in database
         if (snapshot.hasData && snapshot.data.docs != null && snapshot.data.docs.length > 0){
           // Calculates total sum of amounts of entries in database. 
@@ -61,8 +46,8 @@ class AppPostsState extends State<AppPosts> {
           // Returns listView widget of all entries
           return new Scaffold(
             appBar: AppBar(
-            title: Text('Wasteagram - Total: ' + sum.toString()),
-            centerTitle: true,),
+              title: Text('Wasteagram - Total: ' + sum.toString()),
+              centerTitle: true,),
             body: ListView.builder(
               itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int index) {

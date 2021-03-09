@@ -2,16 +2,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:location/location.dart';
-import 'package:flutter/services.dart';
 import 'package:wasteagram/pages/create_entry.dart';
 
 import 'pages/entries.dart';
-import './widgets/loading.dart';
-import './widgets/location.dart';
 
-// Creates widgets depending on set user preferences (theme and # journal entries)
+
+// Widget loads 'loading' page if no database entries are present or 
+// generates listview of Wasteagram entries via data from Cloud Firebase database
 class App extends StatefulWidget  {
 
   @override
@@ -56,7 +53,7 @@ class AppState extends State<App> {
                         child: FloatingActionButton(
                           child: Icon(Icons.camera_alt),
                           onPressed: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => CameraScreen()));}
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewEntry()));}
                         ),
                       ),
                       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
