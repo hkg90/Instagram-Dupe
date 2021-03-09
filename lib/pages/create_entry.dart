@@ -21,10 +21,6 @@ class PostEntryFields {
   String longitude;
   String latitude;
   String url;
-
-  // String toString(){
-  //   return 'Amount: $amount, Date: $date, Longitude: $longitude, Latitude: $latitude, URL: $url';
-  // }  
 }
 
 class CameraScreen extends StatefulWidget {
@@ -36,26 +32,6 @@ class CameraScreen extends StatefulWidget {
 }
 
 class CameraScreenState extends State<CameraScreen> {
-    // Retrieve location data from device
-  // void initState(){
-  //   super.initState();
-  //   retrieveLocation();
-    
-  // }
-  // LocationData locationData;
-  
-
-  // void retrieveLocation() async {
-  //   { 
-  //     var locationService = Location();
-  //     locationData = await locationService.getLocation();
-  //     setState(() {
-        
-  //     });
-  //   }
-  // }
-  
-  
   PickedFile image;
   final picker = ImagePicker();
   final formKey = GlobalKey<FormState>();
@@ -143,31 +119,36 @@ resizeToAvoidBottomPadding: false,
                             width: double.infinity,
                             height: 90,
                             
-                            child: ElevatedButton(
-                              
-                              onPressed: () async {
-                                // Validate returns true if the form is valid
-                                if (formKey.currentState.validate()) {
-                                  // If valid entry, save and submit data and go back to main screen
-                                  formKey.currentState.save();
+                            child: Semantics(
+                              button: true,
+                              enabled: true,
+                              onTapHint: 'Select an iamge',
+                              child: ElevatedButton(
+                                
+                                onPressed: () async {
+                                  // Validate returns true if the form is valid
+                                  if (formKey.currentState.validate()) {
+                                    // If valid entry, save and submit data and go back to main screen
+                                    formKey.currentState.save();
 
-                                  //Send data to Cloud Firebase
-                                FirebaseFirestore.instance.collection('posts').add({
-                                  'Date': postFields.date,
-                                  'URL': postFields.url,
-                                  'Longitude': postFields.longitude,
-                                  'Latitude': postFields.latitude,
-                                  'Amount': postFields.amount,
-                                });
-                                   
-                              Navigator.of(context).pop();              
-                              }
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(Icons.cloud_upload_outlined, size: 80),
-                            ),
+                                    //Send data to Cloud Firebase
+                                  FirebaseFirestore.instance.collection('posts').add({
+                                    'date': postFields.date,
+                                    'imageURL': postFields.url,
+                                    'longitude': postFields.longitude,
+                                    'latitude': postFields.latitude,
+                                    'quantity': postFields.amount,
+                                  });
+                                     
+                                Navigator.of(context).pop();              
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(Icons.cloud_upload_outlined, size: 80),
+                              ),
                           ),
+                            ),
                           )
                   ]
          )
