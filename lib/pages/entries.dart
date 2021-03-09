@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../widgets/display_single_entry.dart';
+import 'display_single_entry.dart';
 import '../widgets/loading.dart';
 
 
