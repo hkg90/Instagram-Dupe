@@ -6,13 +6,11 @@ import 'app.dart';
 
 // Executes app
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  
-  FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-  
-  
+  // Initialize Cloud Firebase in app
+  await Firebase.initializeApp();  
+  // Initialize Crashlytics in app
+  FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);    
   // Launch app
   runApp(App());
 }

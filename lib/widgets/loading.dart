@@ -15,8 +15,10 @@ Widget loading(BuildContext context){
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
             Center(child: CircularProgressIndicator()),
+            // Button is used for purposefully making the app Crash to get
+            // crash report from Crashlytics
             RaisedButton(
-              child: Text('Throw Error!'),
+              child: Text('Crash App!'),
               onPressed: () {FirebaseCrashlytics.instance.crash();})
           ],));          
 

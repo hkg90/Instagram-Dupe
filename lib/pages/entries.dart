@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -44,7 +43,8 @@ class AppPostsState extends State<AppPosts> {
             appBar: AppBar(
               title: Text('Wasteagram - Total: ' + sum.toString()),
               centerTitle: true,),
-            body: ListView.builder(
+            
+              body: ListView.builder(
               itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int index) {
               var appPost = snapshot.data.docs[index];
