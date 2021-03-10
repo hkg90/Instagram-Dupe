@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -58,9 +60,11 @@ class AppPostsState extends State<AppPosts> {
                   trailing: Text(appPost['quantity'].toString()),
                   
                   // If user clicks on entry, widget will display detailed entry
-                  onTap: () {Navigator.push(
-                      context, MaterialPageRoute(builder: (context) {                
-                        return DetailedEntries(entryData: appPost);} 
+                  onTap: () {
+                    FirebaseAnalytics().logEvent(name: 'User_Tapped_for_Detailed_Post', parameters: null);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {                
+                        return DetailedEntries(entryData: appPost);},
+                        settings: RouteSettings(name: 'DetailedEntryPage') 
                       ),
                   );},
                 ),

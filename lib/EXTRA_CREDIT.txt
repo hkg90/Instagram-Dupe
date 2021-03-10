@@ -1,0 +1,4 @@
+Extra credit items completed:
+- the total of all items appears in the app bar and is updated when a new post is created
+- application usage data in Firebase Analytics
+- triggering some code that causes the app to crash and notify Firebase Crashlytics

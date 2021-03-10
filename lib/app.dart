@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -15,12 +17,17 @@ class App extends StatefulWidget  {
 }
 
 class AppState extends State<App> {
+  // Firebase Analaytics initalizer
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
   Widget build(BuildContext context) {
      return MaterialApp(
       title: 'Wasteagram',
       theme: ThemeData.dark(),
+      navigatorObservers: <NavigatorObserver>[observer],
       home: Builder(
           builder: (context) {
             return new Scaffold(
@@ -36,7 +43,9 @@ class AppState extends State<App> {
                   child: FloatingActionButton(
                     child: Icon(Icons.camera_alt),
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewEntry()));}
+                      analytics.logEvent(name: 'new_post', parameters: null);
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewEntry(),
+                      settings: RouteSettings(name: 'NewPostPage')));}
                   ),
                 ),
                 floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -10,6 +11,13 @@ Widget loading(BuildContext context){
     title: Text('Wasteagram' ),
           centerTitle: true,),
           body: 
-          Center(child: CircularProgressIndicator(),),          
-    );    
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+            Center(child: CircularProgressIndicator()),
+            RaisedButton(
+              child: Text('Throw Error!'),
+              onPressed: () {FirebaseCrashlytics.instance.crash();})
+          ],));          
+
 }

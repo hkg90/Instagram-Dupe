@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
@@ -136,9 +138,12 @@ class NewEntryState extends State<NewEntry> {
                                 'latitude': postFields.latitude,
                                 'quantity': postFields.amount,
                                 });
+                              
+                              FirebaseAnalytics().logEvent(name: 'sucessfully_added_new_post', parameters: null);
                               // Return to home page
                               Navigator.of(context).pop();              
                             }
+                            FirebaseAnalytics().logEvent(name: 'failed_adding_new_post', parameters: null);
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
